@@ -1,6 +1,7 @@
 import sys
 import argparse
 from src.db_utils import connect_db
+from src.qa import interactive_loop
 
 def main():
     parser = argparse.ArgumentParser(description='RAG-driven NL2SQL')
@@ -14,9 +15,16 @@ def main():
         print(f"❌ Connection failed: {e}")
         sys.exit(1)
 
+    # run QA loop
+    interp = interactive_loop(engine)
+    interp.run()
+
 
 if __name__ == '__main__':
     main()
+
+
+
 
 
 # python -m src.main --conn postgresql://postgres:rag1234jkr@db.fpqsbfbgeyxevqussnte.supabase.co:5432/postgres

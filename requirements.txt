@@ -1,2 +1,5 @@
 sqlalchemy
 psycopg2-binary
+langchain>=0.1.0
+langchain-community>=0.0.1
+llama-cpp-python>=0.1.79
