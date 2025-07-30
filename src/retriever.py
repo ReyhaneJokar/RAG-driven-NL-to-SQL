@@ -4,7 +4,7 @@ from llm_utils import load_embeddings
 
 # extract tabel's metadata
 def build_retriever(engine, embeddings, index_path: str = "faiss_index"):
-    inspector = inspect(engine)
+    inspector = inspect(engine)  #list of tabels and columns
     docs = []
     for table_name in inspector.get_table_names():
         cols = inspector.get_columns(table_name)

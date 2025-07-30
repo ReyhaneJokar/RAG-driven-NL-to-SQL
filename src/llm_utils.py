@@ -1,10 +1,15 @@
-from langchain.llms import LlamaCpp
+from langchain.llms import openai
 from langchain.embeddings import HuggingFaceEmbeddings
 
-def load_llm(model_path: str = "models/llama-7b/ggml-model.bin"):
-    return LlamaCpp(
-        model_path=model_path,
-        n_ctx=2048, # number of tokens
+def load_llm(model_name: str = "gemma-3-12b", api_base: str = "http://127.0.0.1:11434/v1"):
+    """
+        Uses LM Studio's OpenAI-compatible API to load Gemma-3-12B.
+        api_base should point to LM Studio's server.
+    """
+    return openai(
+        model_name=model_name,
+        openai_api_base=api_base,
+        n_ctx=2048, # maximum number of tokens
         temperature=0.0,
     )
     
