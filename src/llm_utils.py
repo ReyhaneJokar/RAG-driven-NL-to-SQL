@@ -32,6 +32,8 @@ class OpenAIClient:
             model=self.embed_model,
             input=[text]
         )
+        if not resp.data:
+            raise ValueError("No embedding data received (empty response)")
         return resp.data[0].embedding
 
     def embed_documents(self, texts: list[str]) -> list[list[float]]:
@@ -39,6 +41,8 @@ class OpenAIClient:
             model=self.embed_model,
             input=texts
         )
+        if not resp.data:
+            raise ValueError("No embedding data received (empty response)")
         return [d.embedding for d in resp.data]
 
 def load_llm(**kwargs) -> OpenAIClient:

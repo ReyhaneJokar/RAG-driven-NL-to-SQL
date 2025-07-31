@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
 # python -m src.main --conn postgresql://postgres:rag1234jkr@db.fpqsbfbgeyxevqussnte.supabase.co:5432/postgres
 
-# python -m src.main --conn "postgresql://myuser:mypassword@localhost:54332/mydatabase"
+# python -m src.main --conn "postgresql://myuser:mypassword@localhost:5432/postgres"
 
 
 ## adventureworks

@@ -6,7 +6,7 @@ from sqlalchemy import (
 )
 from datetime import datetime, timedelta
 
-DB_URL = "postgresql://myuser:mypassword@localhost:54332/mydatabase"
+DB_URL = "postgresql://myuser:mypassword@localhost:5432/postgres"
 
 naming_convention = {
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
