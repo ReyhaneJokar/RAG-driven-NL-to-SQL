@@ -1,12 +1,12 @@
-from llm_utils import load_llm, load_embeddings
-from retriever import build_retriever
-from rag_pipeline import RAGPipeline
+from src.llm_utils import load_llm
+from src.retriever import build_retriever
+from src.rag_pipeline import RAGPipeline
 
 class interactive_loop:
     def __init__(self, engine):
         self.engine = engine
         self.llm = load_llm()
-        self.embeddings = load_embeddings()
+        self.embeddings = self.llm
         self.retriever = build_retriever(self.engine, self.embeddings)
         self.pipeline = RAGPipeline(self.llm, self.retriever, self.engine)
 

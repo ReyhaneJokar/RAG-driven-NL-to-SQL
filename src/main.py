@@ -30,3 +30,7 @@ if __name__ == '__main__':
 # python -m src.main --conn postgresql://postgres:rag1234jkr@db.fpqsbfbgeyxevqussnte.supabase.co:5432/postgres
 
 # python -m src.main --conn "postgresql://myuser:mypassword@localhost:54332/mydatabase"
+
+
+## adventureworks
+#  python -m src.main --conn "mssql+pyodbc://sa:YourPass123@localhost/AdventureWorks2019?driver=ODBC+Driver+17+for+SQL+Server"

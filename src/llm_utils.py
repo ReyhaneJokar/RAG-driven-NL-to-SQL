@@ -1,18 +1,48 @@
-from langchain.llms import openai
-from langchain.embeddings import HuggingFaceEmbeddings
+import openai
+from openai import OpenAI
+from src.config import MODEL_NAME, EMBED_MODEL, BASE_URL, API_KEY, TEMPERATURE, MAX_TOKENS
 
-def load_llm(model_name: str = "gemma-3-12b", api_base: str = "http://127.0.0.1:11434/v1"):
-    """
-        Uses LM Studio's OpenAI-compatible API to load Gemma-3-12B.
-        api_base should point to LM Studio's server.
-    """
-    return openai(
-        model_name=model_name,
-        openai_api_base=api_base,
-        n_ctx=2048, # maximum number of tokens
-        temperature=0.0,
-    )
-    
-# convert text to vector
-def load_embeddings(model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
-    return HuggingFaceEmbeddings(model_name=model_name)
+class OpenAIClient:
+    def __init__(self):
+        openai.api_base = BASE_URL
+        openai.api_key  = API_KEY
+        self.client     = OpenAI(base_url=BASE_URL, api_key=API_KEY)
+        self.model      = MODEL_NAME
+        self.embed_model  = EMBED_MODEL
+        self.temperature = TEMPERATURE
+        self.max_tokens  = MAX_TOKENS
+
+    def generate(self, prompt: str) -> str:
+        """
+        endpoint /chat/completions
+        """
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=self.temperature,
+            max_tokens=self.max_tokens,
+        )
+        return response.choices[0].message.content.strip()
+
+    def embed_query(self, text: str) -> list[float]:
+        """
+        endpoint /embeddings
+        """
+        resp = self.client.embeddings.create(
+            model=self.embed_model,
+            input=[text]
+        )
+        return resp.data[0].embedding
+
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        resp = self.client.embeddings.create(
+            model=self.embed_model,
+            input=texts
+        )
+        return [d.embedding for d in resp.data]
+
+def load_llm(**kwargs) -> OpenAIClient:
+    return OpenAIClient(**kwargs)
+
+def load_embeddings() -> OpenAIClient:
+    return OpenAIClient()

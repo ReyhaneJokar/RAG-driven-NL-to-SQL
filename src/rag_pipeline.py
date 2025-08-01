@@ -1,4 +1,5 @@
-from langchain import LLMChain, PromptTemplate
+from langchain.chains import LLMChain
+from langchain_core.prompts import PromptTemplate
 from sqlalchemy import text
 
 class RAGPipeline:
@@ -6,23 +7,17 @@ class RAGPipeline:
         self.llm = llm
         self.retriever = retriever
         self.engine = engine
-        self.prompt = PromptTemplate(
-            input_variables=["context", "question"],
-            template="""
-                        Schema:
-                        {context}
-
-                        Generate a SQL query for the following question:
-                        {question}
-                        Only output the SQL.
-                    """
-        )
-        self.chain = LLMChain(llm=self.llm, prompt=self.prompt)
-
+        
     def run(self, question: str):
         docs = self.retriever.get_relevant_documents(question)
         context = "\n".join([d.page_content for d in docs])
-        sql = self.chain.run({"context": context, "question": question}).strip()
+        prompt = (
+            f"Schema:\n{context}\n\n"
+            f"Generate a SQL query for the following question:\n"
+            f"{question}\n"
+            f"Only output the SQL."
+        )
+        sql = self.llm.generate(prompt)
 
         # run query on database
         with self.engine.connect() as conn:
