@@ -2,6 +2,14 @@ from langchain.chains import LLMChain
 from langchain_core.prompts import PromptTemplate
 from sqlalchemy import text
 
+
+def clean_sql_output(sql_text: str) -> str:
+    """
+    Remove markdown code block markers from the SQL query.
+    """
+    return sql_text.replace("```sql", "").replace("```", "").strip()
+
+
 class RAGPipeline:
     def __init__(self, llm, retriever, engine):
         self.llm = llm
@@ -9,7 +17,7 @@ class RAGPipeline:
         self.engine = engine
         
     def run(self, question: str):
-        docs = self.retriever.get_relevant_documents(question)
+        docs = self.retriever.invoke(question)
         context = "\n".join([d.page_content for d in docs])
         prompt = (
             f"Schema:\n{context}\n\n"
@@ -18,6 +26,7 @@ class RAGPipeline:
             f"Only output the SQL."
         )
         sql = self.llm.generate(prompt)
+        sql = clean_sql_output(sql) 
 
         # run query on database
         with self.engine.connect() as conn:
