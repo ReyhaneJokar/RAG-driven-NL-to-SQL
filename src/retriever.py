@@ -18,4 +18,9 @@ def build_retriever(engine, embeddings, persist_directory: str = "chromadb"):
         embedding=embeddings,
         persist_directory=persist_directory
     )
+    
+    # print(f"📄 Number of extracted documents: {len(docs)}")
+    # for i, doc in enumerate(docs[:5]):
+    #     print(f"➡️ Document {i+1}:\n{doc.page_content}")
+
     return vector_store.as_retriever(search_kwargs={"k": 3})

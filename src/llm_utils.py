@@ -37,6 +37,7 @@ class OpenAIClient:
         return resp.data[0].embedding
 
     def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        # print("🔍 Embedding input texts:", texts)
         resp = self.client.embeddings.create(
             model=self.embed_model,
             input=texts
